@@ -6,8 +6,9 @@
     "engines": {
         "vscode": "^1.67.0"
     },
-    "icon": "https://raw.githubusercontent.com/tinybirdco/vscode-tinybird-support/main/images/icon.png",
-    "publisher": "Tinybird",
+    "repository": { "url": "https://github.com/tinybirdco/vscode-tinybird-support" },
+    "icon": "images/icon.png",
+    "publisher": "TinybirdCo",
     "author": {
         "name": "Tinybird",
         "email": "hi@tinybird.co",
