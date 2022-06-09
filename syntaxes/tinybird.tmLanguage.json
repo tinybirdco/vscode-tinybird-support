@@ -1,0 +1,75 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Tinybird datasource schema",
+	"scopeName": "source.datasource",
+
+	"patterns": [
+		{ "include": "#desc_section" },
+		{ "include": "#schema_section" },
+		{ "include": "#sql_section" },
+		{ "include": "#oneliner_section" },
+		{ "include": "#oneliner_meta" },
+		{ "include": "#comment" }
+	],
+
+	"repository": {
+		"desc_section": {
+			"begin": "^\\s*(DESCRIPTION)\\s+(\\>)\\s*$",
+			"end": "^\\s*$",
+			"beginCaptures": {
+				"1": { "name":"keyword.control" },
+				"2": { "name":"keyword.operator" }
+			},
+			"name":"comment.block",
+			"patterns": [ { "include": "#comment" }]
+		},
+
+		"schema_section": {
+			"begin": "^\\s*(SCHEMA)\\s+(\\>)\\s*$",
+			"end": "^\\s*$",
+			"beginCaptures": {
+				"1": { "name":"keyword.control" },
+				"2": { "name":"keyword.operator" }
+			},
+			"patterns": [ { "include": "#comment" }, { "include": "#schema_line" }]
+		},
+
+		"sql_section": {
+			"begin": "^\\s*(SQL)\\s+(\\>)\\s*$",
+			"end": "^\\s*$",
+			"beginCaptures": {
+				"1": { "name":"keyword.control" },
+				"2": { "name":"keyword.operator" }
+			},
+			"patterns": [{ "include": "source.sql" }]
+		},
+
+		"oneliner_section": {
+			"begin": "NODE|TOKEN\\b",
+			"end": "$",
+			"captures": { "0": { "name":"keyword.control" } },
+			"patterns": [{ "include": "source.sql" }]
+		},
+
+		"oneliner_meta": {
+			"begin": "ENGINE[^_]|ENGINE_PARTITION_KEY|ENGINE_SORTING_KEY|TYPE|DATASOURCE|TOKEN\\b",
+			"end": "$",
+			"captures": { "0": { "name":"keyword" } },
+			"patterns": [{ "include": "source.sql" }]
+		},
+
+		"comment": {
+			"match": "^\\s*#.*$",
+			"name": "comment"
+		},
+
+		"schema_line": {
+			"match": "^\\s*([^\\s]+)\\s+([^\\s]+)(?:\\s+`json\\:(\\$[^`]+`))?",
+			"captures": {
+				"0": { "name":"variable" },
+				"1": { "name":"keyword.operator" },
+				"3": { "name":"string" }
+			}
+		}
+	}
+}
