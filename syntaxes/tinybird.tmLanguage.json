@@ -53,7 +53,7 @@
 		},
 
 		"oneliner_meta": {
-			"begin": "ENGINE[^_]|ENGINE_PARTITION_KEY|ENGINE_SORTING_KEY|TYPE|DATASOURCE|TOKEN\\b",
+			"begin": "ENGINE[^_]|ENGINE_PARTITION_KEY|ENGINE_SORTING_KEY|ENGINE_SETTINGS|TYPE|DATASOURCE|TOKEN\\b",
 			"end": "$",
 			"captures": { "0": { "name":"keyword" } },
 			"patterns": [{ "include": "source.sql" }]
