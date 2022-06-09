@@ -6,4 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release.
+## [0.1.0] - 2022-06-09
+
+### Added
+
+- Initial release with syntax support for `.datasource` and `.pipe` files.
