@@ -1,6 +1,7 @@
 name: Deploy to VS marketplace
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "*"
