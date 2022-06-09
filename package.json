@@ -1,27 +1,41 @@
 {
-    "name": "tinybird-syntax-support",
-    "displayName": "Tinybird support",
-    "description": "",
-    "version": "0.0.1",
+    "name": "vscode-tinybird-support",
+    "displayName": "Tinybird support for Visual Studio Code",
+    "description": "This extension provides syntax highlighting for Tinybird data projects.",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.67.0"
     },
+    "icon": "https://raw.githubusercontent.com/tinybirdco/vscode-tinybird-support/main/images/icon.png",
+    "publisher": "Tinybird",
+    "author": {
+        "name": "Tinybird",
+        "email": "hi@tinybird.co",
+        "url": "https://tinybird.co"
+    },
+    "contributors": [
+        {
+            "name": "Luis Medel",
+            "email": "luis@luismedel.com"
+        }
+    ],
+    "license": "MIT",
     "categories": [
-        "Programming Languages"
+        "Programming Languages",
+        "Notebooks",
+        "Data Science"
     ],
     "contributes": {
         "languages": [{
             "id": "tinybird",
-            "aliases": ["Tinybird project files", "tinybird"],
+            "aliases": ["Tinybird project", "tinybird"],
             "extensions": [".datasource", ".pipe", ".endpoint"],
             "configuration": "./language-configuration.json"
         }],
-        "grammars": [
-        {
+        "grammars": [{
             "language": "tinybird",
-            "scopeName": "source.datasource",
+            "scopeName": "source.tinybird",
             "path": "./syntaxes/tinybird.tmLanguage.json"
-        }
-        ]
+        }]
     }
 }

@@ -1,5 +1,7 @@
-# VSCode support for Tinybird projects
+# Tinybird support for Visual Studio Code
 
-This extension provides basic syntax highlighting for Tinybird data projects (`.datasource` and `.pipe` files).
+![Screenshot](images/banner.png)
+
+This extension provides syntax highlighting for [Tinybird](https://tinybird.co) data projects (`.datasource` and `.pipe` files).
 
 ![Screenshot](images/screenshot.jpg)

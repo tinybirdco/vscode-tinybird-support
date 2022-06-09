@@ -1,7 +1,7 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
 	"name": "Tinybird datasource schema",
-	"scopeName": "source.datasource",
+	"scopeName": "source.tinybird",
 
 	"patterns": [
 		{ "include": "#desc_section" },
@@ -9,7 +9,8 @@
 		{ "include": "#sql_section" },
 		{ "include": "#oneliner_section" },
 		{ "include": "#oneliner_meta" },
-		{ "include": "#comment" }
+		{ "include": "#comment" },
+		{ "include": "source.sql" }
 	],
 
 	"repository": {
