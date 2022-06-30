@@ -9,6 +9,8 @@
 		{ "include": "#sql_section" },
 		{ "include": "#oneliner_section" },
 		{ "include": "#oneliner_meta" },
+		{ "include": "#oneliner_meta_engine" },
+		{ "include": "#oneliner_meta_kafka" },
 		{ "include": "#comment" },
 		{ "include": "source.sql" }
 	],
@@ -53,7 +55,21 @@
 		},
 
 		"oneliner_meta": {
-			"begin": "ENGINE[^_]|ENGINE_PARTITION_KEY|ENGINE_SORTING_KEY|ENGINE_SETTINGS|TYPE|DATASOURCE|TOKEN\\b",
+			"begin": "TYPE|DATASOURCE|TOKEN\\b",
+			"end": "$",
+			"captures": { "0": { "name":"keyword" } },
+			"patterns": [{ "include": "source.sql" }]
+		},
+
+		"oneliner_meta_engine": {
+			"begin": "ENGINE[^_]|ENGINE_(PARTITION_KEY|SORTING_KEY|SAMPLING_KEY|SETTINGS|VER|SIGN|TTL)\\b",
+			"end": "$",
+			"captures": { "0": { "name":"keyword" } },
+			"patterns": [{ "include": "source.sql" }]
+		},
+
+		"oneliner_meta_kafka": {
+			"begin": "KAFKA_(CONNECTION_NAME|TOPIC|GROUP_ID|AUTO_OFFSET_RESET|STORE_RAW_VALUE|TARGET_PARTITIONS)\\b",
 			"end": "$",
 			"captures": { "0": { "name":"keyword" } },
 			"patterns": [{ "include": "source.sql" }]
