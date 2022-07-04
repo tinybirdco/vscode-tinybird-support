@@ -62,7 +62,7 @@
 		},
 
 		"oneliner_meta_engine": {
-			"begin": "ENGINE[^_]|ENGINE_(PARTITION_KEY|SORTING_KEY|SAMPLING_KEY|SETTINGS|VER|SIGN|TTL)\\b",
+			"begin": "ENGINE[^_]|ENGINE_(PARTITION_KEY|PRIMARY_KEY|SORTING_KEY|SAMPLING_KEY|SETTINGS|VER|SIGN|TTL)\\b",
 			"end": "$",
 			"captures": { "0": { "name":"keyword" } },
 			"patterns": [{ "include": "source.sql" }]
