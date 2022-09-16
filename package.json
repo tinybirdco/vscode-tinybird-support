@@ -2,7 +2,7 @@
     "name": "vscode-tinybird-support",
     "displayName": "Tinybird support for Visual Studio Code",
     "description": "This extension provides syntax highlighting for Tinybird data projects.",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "engines": {
         "vscode": "^1.67.0"
     },
@@ -30,7 +30,7 @@
         "languages": [{
             "id": "tinybird",
             "aliases": ["Tinybird project", "tinybird"],
-            "extensions": [".datasource", ".pipe", ".endpoint"],
+            "extensions": [".datasource", ".pipe", ".endpoint", ".incl"],
             "configuration": "./language-configuration.json",
             "icon": {
                 "light": "./images/icons/tb-light.png",
