@@ -26,6 +26,7 @@
         "Notebooks",
         "Data Science"
     ],
+    "main": "./src/extension.js",
     "contributes": {
         "languages": [{
             "id": "tinybird",
@@ -41,6 +42,18 @@
             "language": "tinybird",
             "scopeName": "source.tinybird",
             "path": "./syntaxes/tinybird.tmLanguage.json"
+        }],
+        "commands": [{
+            "command": "tinybird.sql",
+            "title": "Run SQL in Tinybird project",
+            "enablement": "true"
         }]
-    }
+    },
+	"scripts": {
+	},
+	"devDependencies": {
+		"@types/node": "^16.11.7",
+		"@types/vscode": "^1.73.0",
+		"typescript": "^4.8.4"
+	}
 }
