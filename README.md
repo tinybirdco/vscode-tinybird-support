@@ -18,7 +18,7 @@ Execute any SQL in your Tinybird workspace by selecting a sentence in the editor
 
 You'll see the results in the `Tinybird SQL` output panel.
 
-![tinybird.sql screenshot](https://github.com/tinybirdco/vscode-tinybird-support/raw/main/images/tinybird.sql.jpg)
+![tinybird.sql screenshot](https://github.com/tinybirdco/vscode-tinybird-support/raw/main/images/tinybird.sql.png)
 
 > Note: for this command to work you need to have your `tb` command properly configured. Please, [refer to our docs](https://www.tinybird.co/docs/quick-start-cli.html) for a quick start.
 
