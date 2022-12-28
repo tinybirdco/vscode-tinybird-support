@@ -69,10 +69,6 @@
                 "markdownDescription": "Activation script name. Default is `bin/activate` but for some shells you might need another one (for example `bin/activate.fish` for the fish shell)."
               }
             }
-        },
-        "configurationDefaults": {
-            "venv": ".e",
-            "venvActivate": "bin/activate"
         }
     },
 	"scripts": {
