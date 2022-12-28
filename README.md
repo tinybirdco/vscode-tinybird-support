@@ -14,7 +14,7 @@ Adds syntax highlight for `.datasource`, `.pipe` and `.incl` files.
 
 ### tinybird.sql
 
-Execute arbitrary SQL in yout Tinybird workspace by selecting it in the editor and pressing the default `f5` keybinding (alternatively, you can call the command from the command bar).
+Execute arbitrary SQL in yout Tinybird workspace by selecting it in the editor and pressing the default `Cmd+Enter/Ctrl+Enter` keybinding (alternatively, you can call the command from the command bar).
 
 You'll see the results in the `Tinybird SQL` output panel.
 

@@ -92,7 +92,7 @@
         "keybindings":[
             {
                 "command": "tinybird.sql",
-                "key": "f5",
+                "key": "cmd+enter",
                 "when": "editorTextFocus && editorLangId == 'tinybird' || editorTextFocus && editorLangId == 'sql'"
             }
         ],

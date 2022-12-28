@@ -2,7 +2,7 @@
 
 ## [0.5.0] - 2022-12-28
 
-- Added: Execute arbitrary SQL in yout Tinybird workspace by selecting it in an editor and pressing the default `f5` keybinding or calling the command `tinybird.sql`. See the results in the `Tinybird SQL` output panel.
+- Added: Execute arbitrary SQL in yout Tinybird workspace by selecting it in an editor and pressing the default `Cmd+Enter/Ctrl+Enter` keybinding or calling the command `tinybird.sql`. See the results in the `Tinybird SQL` output panel.
 
   > Note: you need to have your `tb` command properly configured for this command to work. Please, [refer to our docs](https://www.tinybird.co/docs/quick-start-cli.html) for a quick start.
 
