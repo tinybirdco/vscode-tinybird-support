@@ -14,13 +14,13 @@ Adds syntax highlight for `.datasource`, `.pipe` and `.incl` files.
 
 ### tinybird.sql
 
-Execute arbitrary SQL in yout Tinybird workspace by selecting it in the editor and pressing the default `Cmd+Enter/Ctrl+Enter` keybinding (alternatively, you can call the command from the command bar).
+Execute any SQL in your Tinybird workspace by selecting a sentence in the editor and pressing the default `Cmd+Enter` keybinding (alternatively, you can call the command from the command bar or set your preferred mapping).
 
 You'll see the results in the `Tinybird SQL` output panel.
 
 ![tinybird.sql screenshot](https://github.com/tinybirdco/vscode-tinybird-support/raw/main/images/tinybird.sql.jpg)
 
-> Note: you need to have your `tb` command properly configured for this command to work. Please, [refer to our docs](https://www.tinybird.co/docs/quick-start-cli.html) for a quick start.
+> Note: for this command to work you need to have your `tb` command properly configured. Please, [refer to our docs](https://www.tinybird.co/docs/quick-start-cli.html) for a quick start.
 
 #### Configure the extension
 
