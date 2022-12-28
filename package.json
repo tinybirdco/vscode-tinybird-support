@@ -43,11 +43,37 @@
             "scopeName": "source.tinybird",
             "path": "./syntaxes/tinybird.tmLanguage.json"
         }],
-        "commands": [{
-            "command": "tinybird.sql",
-            "title": "Run SQL in Tinybird project",
-            "enablement": "true"
-        }]
+        "commands": [
+            {
+                "command": "tinybird.fmt",
+                "title": "Format SQL in Tinybird project",
+                "enablement": "true"
+            },
+            {
+                "command": "tinybird.sql",
+                "title": "Run SQL in Tinybird project",
+                "enablement": "true"
+            }
+        ],
+        "configuration": {
+            "title": "Tinybird",
+            "properties": {
+              "tinybird.venv": {
+                "type": "string",
+                "default": ".e",
+                "markdownDescription": "Work inside this Python virtual env. For example `venv` or `.e`. Emtpy for none."
+              },
+              "tinybird.venvActivate": {
+                "type": "string",
+                "default": "bin/activate",
+                "markdownDescription": "Activation script name. Default is `bin/activate` but for some shells you might need another one (for example `bin/activate.fish` for the fish shell)."
+              }
+            }
+        },
+        "configurationDefaults": {
+            "venv": ".e",
+            "venvActivate": "bin/activate"
+        }
     },
 	"scripts": {
 	},

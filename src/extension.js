@@ -2,20 +2,33 @@
 
 exports.__esModule = true;
 
-const vscode = require("vscode");
+const vscode = require ("vscode");
 const cp = require ("child_process");
 
-const info = vscode.window.createOutputChannel ("Tinybird-Output", "sql");
+const infoGeneral = vscode.window.createOutputChannel ("Tinybird");
+const infoSql = vscode.window.createOutputChannel ("Tinybird SQL", "sql");
 
-function getConfigValue(key, $default)
+function getConfigValue (key, $default)
 {
     try
     {
-        let config = vscode.workspace.getConfiguration ().get("tinybird");
-        let result = config && config.get[key];
+        let config = vscode.workspace.getConfiguration ().get ("tinybird");
+        let result = config && config[key];
         return result || $default;
     }
     catch { return $default; }
+}
+
+function getVenvCommand ()
+{
+    let venv = getConfigValue("venv", null);
+    if (venv)
+    {
+        let activate = getConfigValue("venvActivate", "bin/activate");
+        return `source ${venv}/${activate}`;
+    }
+
+    return "true"
 }
 
 function jsonToTable(json)
@@ -99,7 +112,36 @@ function jsonToTable(json)
 
 function activate (context)
 {
-	const disposable = vscode.commands.registerCommand ('tinybird.sql', () => {
+	const fmtCommand = vscode.commands.registerCommand ('tinybird.fmt', (uri) => {
+        let path = vscode.workspace.workspaceFolders[0].uri.path;
+        let commands = [`cd ${path}`,
+                        getVenvCommand (),
+                        `tb --no-version-warning fmt --yes "${uri.fsPath}"`];
+
+        let command = commands.join(" && ");
+
+        cp.exec (command, async (err, stdout, stderr) => {
+            if (err)
+                infoSql.appendLine (`ERROR >\n${err}\n${stderr}`);
+            else
+            {
+                try
+                {
+                    let data = JSON.parse (stdout);
+                    infoSql.appendLine (`DATA >\n${jsonToTable (data)}`);
+                }
+                catch
+                {
+                    infoSql.appendLine (`MESSAGE >\n${stdout}`);
+                }
+            }
+
+            infoSql.appendLine ('');
+            await infoSql.show(true);
+        });
+    });
+
+    const sqlCommand = vscode.commands.registerCommand ('tinybird.sql', () => {
         let editor = vscode.window.activeTextEditor;
         if (!editor)
             return;
@@ -110,37 +152,33 @@ function activate (context)
 
         let path = vscode.workspace.workspaceFolders[0].uri.path;
         let commands = [`cd ${path}`,
-                        "true",
+                        getVenvCommand (),
                         `tb --no-version-warning sql "${query}" --format json`];
 
-        let venv = getConfigValue("venv", null);
-        if (venv)
-            commands[1] = `${venv}/bin/activate`
-
         let command = commands.join(" && ");
-        info.appendLine (`QUERY >\n${query}\n`);
+        infoSql.appendLine (`QUERY >\n${query}\n`);
         cp.exec (command, async (err, stdout, stderr) => {
             if (err)
-                info.appendLine (`ERROR: ${err} >\n${stderr}`);
+                infoSql.appendLine (`ERROR >\n${err}\n${stderr}`);
             else
             {
                 try
                 {
                     let data = JSON.parse (stdout);
-                    info.appendLine (`DATA >\n${jsonToTable (data)}`);
+                    infoSql.appendLine (`DATA >\n${jsonToTable (data)}`);
                 }
                 catch
                 {
-                    info.appendLine (`MESSAGE >\n${stdout}`);
+                    infoSql.appendLine (`MESSAGE >\n${stdout}`);
                 }
             }
 
-            info.appendLine ('');
-            await info.show(true);
+            infoSql.appendLine ('');
+            await infoSql.show(true);
         });
     });
 
-    context.subscriptions.push (disposable);
+    context.subscriptions.push (sqlCommand);
 }
 
 exports.activate = activate;
