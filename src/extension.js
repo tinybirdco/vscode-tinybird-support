@@ -4,10 +4,17 @@ exports.__esModule = true;
 
 const vscode = require ("vscode");
 const cp = require ("child_process");
+const path = require('path');
 
-const infoGeneral = vscode.window.createOutputChannel ("Tinybird");
 const infoSql = vscode.window.createOutputChannel ("Tinybird SQL", "sql");
 
+/**
+ * Retrieves a setting.
+ * 
+ * @param {string} key 
+ * @param {any} $default 
+ * @returns 
+ */
 function getConfigValue (key, $default)
 {
     try
@@ -19,18 +26,29 @@ function getConfigValue (key, $default)
     catch { return $default; }
 }
 
+/**
+ * Returns the virtual env activation command, if needed.
+ * 
+ * @returns the venv activation command or `true`.
+ */
 function getVenvCommand ()
 {
     let venv = getConfigValue("venv", null);
     if (venv)
     {
         let activate = getConfigValue("venvActivate", "bin/activate");
-        return `source ${venv}/${activate}`;
+        return `. "${venv}/${activate}"`;
     }
 
     return "true"
 }
 
+/**
+ * Converts a json Tinybird response into an ASCII table.
+ * 
+ * @param {object} json 
+ * @returns with the ASCII table.
+ */
 function jsonToTable(json)
 {
     const PAD = 2;
@@ -50,6 +68,7 @@ function jsonToTable(json)
     }
 
     let rows = [];
+
     json.data.forEach (data => {
         let row = [];
 
@@ -58,8 +77,11 @@ function jsonToTable(json)
             if (!data.hasOwnProperty (k))
                 continue;
 
-            let meta = columns_by_name[k],
-                v = data[k].toString ();
+            let meta = columns_by_name[k];
+
+            let v;
+            try { v = data[k].toString (); }
+            catch { v = ''; }
 
             row[meta.index] = v;
             if ((v.length + PAD) > meta.length)
@@ -77,9 +99,9 @@ function jsonToTable(json)
 
         let type = columns_by_index[index].meta.type.toLowerCase ();
         if (type == "string" || type == "date" || type == "datetime")
-            return `${value} `.padStart (length, ' ');
-        else
             return ` ${value}`.padEnd (length, ' ');
+        else
+            return `${value} `.padStart (length, ' ');
     }
 
     function makeRow (values, mid, left, right)
@@ -112,35 +134,6 @@ function jsonToTable(json)
 
 function activate (context)
 {
-	const fmtCommand = vscode.commands.registerCommand ('tinybird.fmt', (uri) => {
-        let path = vscode.workspace.workspaceFolders[0].uri.path;
-        let commands = [`cd ${path}`,
-                        getVenvCommand (),
-                        `tb --no-version-warning fmt --yes "${uri.fsPath}"`];
-
-        let command = commands.join(" && ");
-
-        cp.exec (command, async (err, stdout, stderr) => {
-            if (err)
-                infoSql.appendLine (`ERROR >\n${err}\n${stderr}`);
-            else
-            {
-                try
-                {
-                    let data = JSON.parse (stdout);
-                    infoSql.appendLine (`DATA >\n${jsonToTable (data)}`);
-                }
-                catch
-                {
-                    infoSql.appendLine (`MESSAGE >\n${stdout}`);
-                }
-            }
-
-            infoSql.appendLine ('');
-            await infoSql.show(true);
-        });
-    });
-
     const sqlCommand = vscode.commands.registerCommand ('tinybird.sql', () => {
         let editor = vscode.window.activeTextEditor;
         if (!editor)
@@ -150,8 +143,12 @@ function activate (context)
         if (!query)
             return;
 
-        let path = vscode.workspace.workspaceFolders[0].uri.path;
-        let commands = [`cd ${path}`,
+        let dataProjectSubdir = getConfigValue ("dataProjectSubdir", "");
+
+        let workspacePath = vscode.workspace.workspaceFolders[0].uri.path,
+            dataProjectPath = path.join (workspacePath, dataProjectSubdir);
+
+        let commands = [`cd "${dataProjectPath}"`,
                         getVenvCommand (),
                         `tb --no-version-warning sql "${query}" --format json`];
 
@@ -167,7 +164,7 @@ function activate (context)
                     let data = JSON.parse (stdout);
                     infoSql.appendLine (`DATA >\n${jsonToTable (data)}`);
                 }
-                catch
+                catch (ex)
                 {
                     infoSql.appendLine (`MESSAGE >\n${stdout}`);
                 }
