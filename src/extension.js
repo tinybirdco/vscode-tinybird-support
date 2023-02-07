@@ -139,6 +139,7 @@ function activate (context)
         if (!editor)
             return;
 
+        let pipeName = getPipeName(editor.document.fileName)
         let query = editor.document.getText (editor.selection);
         if (!query)
             return;
@@ -148,12 +149,27 @@ function activate (context)
         let workspacePath = vscode.workspace.workspaceFolders[0].uri.path,
             dataProjectPath = path.join (workspacePath, dataProjectSubdir);
 
-        let commands = [`cd "${dataProjectPath}"`,
+        let commands;
+        if (query.trim().startsWith('NODE')) {
+            let nodeName = query.trim().split('NODE').slice(-1)[0].trim();
+            commands = [`cd "${dataProjectPath}"`,
                         getVenvCommand (),
-                        `tb --no-version-warning sql "${query}" --format json`];
+                        `tb --no-version-warning sql --stats --pipe ${editor.document.fileName} --node ${nodeName} --format json`];
+            infoSql.appendLine (`NODE ${nodeName}\n`);
+        } else {
+            let pipeline = ''
+            if (pipeName !== undefined) {
+                pipeline = `--pipeline ${pipeName}`
+            }
+
+            commands = [`cd "${dataProjectPath}"`,
+                        getVenvCommand (),
+                        `tb --no-version-warning sql "${query}" ${pipeline} --stats --format json`];
+
+            infoSql.appendLine (`QUERY >\n${query}\n`);
+        }
 
         let command = commands.join(" && ");
-        infoSql.appendLine (`QUERY >\n${query}\n`);
         cp.exec (command, async (err, stdout, stderr) => {
             if (err)
                 infoSql.appendLine (`ERROR >\n${err}\n${stderr}`);
@@ -161,8 +177,11 @@ function activate (context)
             {
                 try
                 {
-                    let data = JSON.parse (stdout);
-                    infoSql.appendLine (`DATA >\n${jsonToTable (data)}`);
+                    let stats = stdout.split('\n').slice(0, 3).join('\n')
+                    let jsonData = stdout.split('\n').slice(3).join('')
+                    let data = JSON.parse (jsonData);
+                    infoSql.appendLine (`DATA >\n${jsonToTable (data)}\n`);
+                    infoSql.appendLine (`STATS >\n${stats}`);
                 }
                 catch (ex)
                 {
@@ -176,6 +195,15 @@ function activate (context)
     });
 
     context.subscriptions.push (sqlCommand);
+}
+
+function getPipeName(fileName) {
+    fileName = fileName.split('/').slice(-1);
+    let pipeName = undefined;
+    if (fileName && fileName.length && fileName[0].endsWith('.pipe')) {
+        pipeName = fileName[0].split('.pipe')[0]
+    }
+    return pipeName;
 }
 
 exports.activate = activate;
