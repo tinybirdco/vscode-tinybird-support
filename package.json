@@ -105,6 +105,13 @@
             }
         ],
 
+        "snippets": [
+            {
+                "language": "tinybird",
+                "path": "./snippets/ch.json"
+            }
+        ],
+
         "configurationDefaults": {
         }
     },
