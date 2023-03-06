@@ -2,7 +2,7 @@
     "name": "vscode-tinybird-support",
     "displayName": "Tinybird support for Visual Studio Code",
     "description": "This extension provides syntax highlighting and commands for Tinybird data projects.",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -102,6 +102,13 @@
                 "command": "tinybird.sql",
                 "key": "cmd+enter",
                 "when": "editorTextFocus && editorLangId == 'tinybird' || editorTextFocus && editorLangId == 'sql'"
+            }
+        ],
+
+        "snippets": [
+            {
+                "language": "tinybird",
+                "path": "./snippets/ch.json"
             }
         ],
 
