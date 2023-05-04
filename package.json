@@ -44,7 +44,7 @@
     "Notebooks",
     "Data Science"
   ],
-  "main": "./out/extension.js",
+  "main": "./build/extension.js",
   "activationEvents": [
     "onLanguage:tinybird",
     "onLanguage:sql"

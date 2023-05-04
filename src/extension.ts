@@ -11,11 +11,10 @@ const infoSql = vscode.window.createOutputChannel('Tinybird SQL', 'sql')
  * @param {any} $default
  * @returns
  */
-function getConfigValue(key: string, $default: string | null): any {
+function getConfigValue<T>(key: string, $default: T): string | T {
   try {
-    let config = vscode.workspace.getConfiguration().get('tinybird')
-    let result = config && config[key as keyof typeof config]
-    return result || $default
+    const config = vscode.workspace.getConfiguration().get('tinybird')
+    return config?.[key as keyof typeof config] || $default
   } catch {
     return $default
   }
@@ -42,10 +41,17 @@ function getVenvCommand() {
  * @param {object} json
  * @returns with the ASCII table.
  */
-function jsonToTable(json: { meta: any; data: any[] }) {
+function jsonToTable(json: {
+  meta: { name: string; type: string }[]
+  data: Record<string, any>[]
+}) {
   const PAD = 2
 
-  let columns_by_index = [] as { index: number; length: number; meta: any }[]
+  let columns_by_index = [] as {
+    index: number
+    length: number
+    meta: { name: string; type: string }
+  }[]
   let columns_by_name = {} as Record<string, (typeof columns_by_index)[number]>
   let index = 0
   for (let m in json.meta) {
