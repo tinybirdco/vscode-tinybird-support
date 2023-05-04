@@ -1,124 +1,135 @@
 {
-    "name": "vscode-tinybird-support",
-    "displayName": "Tinybird support for Visual Studio Code",
-    "description": "This extension provides syntax highlighting and commands for Tinybird data projects.",
-    "version": "0.7.0",
-    "engines": {
-        "vscode": "^1.74.0"
+  "name": "vscode-tinybird-support",
+  "displayName": "Tinybird support for Visual Studio Code",
+  "description": "This extension provides syntax highlighting and commands for Tinybird data projects.",
+  "version": "0.7.0",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "repository": {
+    "url": "https://github.com/tinybirdco/vscode-tinybird-support"
+  },
+  "icon": "images/icon.png",
+  "publisher": "TinybirdCo",
+  "author": {
+    "name": "Tinybird",
+    "email": "hi@tinybird.co",
+    "url": "https://tinybird.co"
+  },
+  "contributors": [
+    {
+      "name": "Luis Medel",
+      "email": "luis@luismedel.com"
     },
-    "repository": { "url": "https://github.com/tinybirdco/vscode-tinybird-support" },
-    "icon": "images/icon.png",
-    "publisher": "TinybirdCo",
-    "author": {
-        "name": "Tinybird",
-        "email": "hi@tinybird.co",
-        "url": "https://tinybird.co"
+    {
+      "name": "Alejandro Martin",
+      "email": "hi@alejandromav.com"
     },
-    "contributors": [
-        {
-            "name": "Luis Medel",
-            "email": "luis@luismedel.com"
-        },
-        {
-            "name": "Alejandro Martin",
-            "email": "hi@alejandromav.com"
-        },
-        {
-            "name": "Jordi Villar",
-            "email": "jrdi.villar@gmail.com"
-        },
-        {
-            "name": "Alejandro Del Amo",
-            "email": "alejandro@tinybird.co"
-        },
-        {
-            "name": "Albert Romeu",
-            "email": "alrocar@tinybird.co"
+    {
+      "name": "Jordi Villar",
+      "email": "jrdi.villar@gmail.com"
+    },
+    {
+      "name": "Alejandro Del Amo",
+      "email": "alejandro@tinybird.co"
+    },
+    {
+      "name": "Albert Romeu",
+      "email": "alrocar@tinybird.co"
+    }
+  ],
+  "license": "MIT",
+  "categories": [
+    "Programming Languages",
+    "Notebooks",
+    "Data Science"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:tinybird",
+    "onLanguage:sql"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "tinybird",
+        "aliases": [
+          "Tinybird project",
+          "tinybird"
+        ],
+        "extensions": [
+          ".datasource",
+          ".pipe",
+          ".endpoint",
+          ".incl"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./images/icons/tb-light.png",
+          "dark": "./images/icons/tb-dark.png"
         }
+      }
     ],
-    "license": "MIT",
-    "categories": [
-        "Programming Languages",
-        "Notebooks",
-        "Data Science"
+    "grammars": [
+      {
+        "language": "tinybird",
+        "scopeName": "source.tinybird",
+        "path": "./syntaxes/tinybird.tmLanguage.json"
+      }
     ],
-    "main": "./src/extension.js",
-    "activationEvents": [
-        "onLanguage:tinybird",
-        "onLanguage:sql"
+    "commands": [
+      {
+        "command": "tinybird.sql",
+        "title": "Execute selected SQL in Tinybird ('tb sql')",
+        "enablement": "true"
+      }
     ],
-    "contributes": {
-        "languages": [{
-            "id": "tinybird",
-            "aliases": ["Tinybird project", "tinybird"],
-            "extensions": [".datasource", ".pipe", ".endpoint", ".incl"],
-            "configuration": "./language-configuration.json",
-            "icon": {
-                "light": "./images/icons/tb-light.png",
-                "dark": "./images/icons/tb-dark.png"
-            }
-        }],
-
-        "grammars": [{
-            "language": "tinybird",
-            "scopeName": "source.tinybird",
-            "path": "./syntaxes/tinybird.tmLanguage.json"
-        }],
-
-        "commands": [
-            {
-                "command": "tinybird.sql",
-                "title": "Execute selected SQL in Tinybird ('tb sql')",
-                "enablement": "true"
-            }
-        ],
-
-        "configuration": {
-            "title": "Tinybird",
-
-            "properties": {
-              "tinybird.dataProjectSubdir": {
-                "type": "string",
-                "default": "",
-                "markdownDescription": "Where your data project is located in your workspace. Emtpy for the workspace root."
-              },
-
-              "tinybird.venv": {
-                "type": "string",
-                "default": ".e",
-                "markdownDescription": "Activate this Python virtual environment. Emtpy for none."
-              },
-
-              "tinybird.venvActivate": {
-                "type": "string",
-                "default": "bin/activate",
-                "markdownDescription": "If using a virtual env, the activation command. Default is `bin/activate` but for some shells you might need another one (for example `bin/activate.fish` for the [fish shell](https://fishshell.com/))."
-              }
-            }
+    "configuration": {
+      "title": "Tinybird",
+      "properties": {
+        "tinybird.dataProjectSubdir": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Where your data project is located in your workspace. Emtpy for the workspace root."
         },
-
-        "keybindings":[
-            {
-                "command": "tinybird.sql",
-                "key": "cmd+enter",
-                "when": "editorTextFocus && editorLangId == 'tinybird' || editorTextFocus && editorLangId == 'sql'"
-            }
-        ],
-
-        "snippets": [
-            {
-                "language": "tinybird",
-                "path": "./snippets/ch.json"
-            }
-        ],
-
-        "configurationDefaults": {
+        "tinybird.venv": {
+          "type": "string",
+          "default": ".e",
+          "markdownDescription": "Activate this Python virtual environment. Emtpy for none."
+        },
+        "tinybird.venvActivate": {
+          "type": "string",
+          "default": "bin/activate",
+          "markdownDescription": "If using a virtual env, the activation command. Default is `bin/activate` but for some shells you might need another one (for example `bin/activate.fish` for the [fish shell](https://fishshell.com/))."
         }
+      }
     },
-	"scripts": {
-	},
-	"devDependencies": {
-		"@types/node": "^16.11.7",
-		"@types/vscode": "^1.73.0"
-	}
+    "keybindings": [
+      {
+        "command": "tinybird.sql",
+        "key": "cmd+enter",
+        "when": "editorTextFocus && editorLangId == 'tinybird' || editorTextFocus && editorLangId == 'sql'"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "tinybird",
+        "path": "./snippets/ch.json"
+      }
+    ],
+    "configurationDefaults": {}
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "lint": "eslint \"src/**/*.ts\"",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.7",
+    "@types/vscode": "^1.73.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "typescript": "^5.0.2"
+  }
 }
