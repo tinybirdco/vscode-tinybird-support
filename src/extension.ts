@@ -61,7 +61,7 @@ function jsonToTable(json: {
     columns_by_index[index] = {
       index: index,
       length: name.length + PAD,
-      meta: meta,
+      meta
     }
     columns_by_name[name] = columns_by_index[index]
     index++
@@ -163,7 +163,7 @@ export function activate(context: vscode.ExtensionContext) {
       commands = [
         `cd "${dataProjectPath}"`,
         getVenvCommand(),
-        `tb --no-version-warning sql --stats --pipe ${editor.document.fileName} --node ${nodeName} --format json`,
+        `tb --no-version-warning sql --stats --pipe ${editor.document.fileName} --node ${nodeName} --format json`
       ]
       infoSql.appendLine(`NODE ${nodeName}\n`)
     } else {
@@ -175,7 +175,7 @@ export function activate(context: vscode.ExtensionContext) {
       commands = [
         `cd "${dataProjectPath}"`,
         getVenvCommand(),
-        `tb --no-version-warning sql "${query}" ${pipeline} --stats --format json`,
+        `tb --no-version-warning sql "${query}" ${pipeline} --stats --format json`
       ]
 
       infoSql.appendLine(`QUERY >\n${query}\n`)
