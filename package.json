@@ -86,6 +86,36 @@
         "command": "tinybird.sql",
         "title": "Execute selected SQL in Tinybird ('tb sql')",
         "enablement": "true"
+      },
+      {
+        "command": "tb.auth",
+        "title": "tb auth",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tb.connection.create",
+        "title": "tb connection create",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tb.connection.ls",
+        "title": "tb connection ls",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tb.push",
+        "title": "tb push",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tb.pull",
+        "title": "tb pull",
+        "enablement": "true",
+        "category": "Tinybird CLI"
       }
     ],
     "configuration": {

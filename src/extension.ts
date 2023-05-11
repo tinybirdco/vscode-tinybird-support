@@ -1,39 +1,10 @@
 import * as vscode from 'vscode'
 import * as cp from 'child_process'
 import * as path from 'path'
+import { registerCLICommands } from './commands'
+import { getConfigValue, getVenvCommand } from './utils'
 
 const infoSql = vscode.window.createOutputChannel('Tinybird SQL', 'sql')
-
-/**
- * Retrieves a setting.
- *
- * @param {string} key
- * @param {any} $default
- * @returns
- */
-function getConfigValue<T>(key: string, $default: T): string | T {
-  try {
-    const config = vscode.workspace.getConfiguration().get('tinybird')
-    return config?.[key as keyof typeof config] || $default
-  } catch {
-    return $default
-  }
-}
-
-/**
- * Returns the virtual env activation command, if needed.
- *
- * @returns the venv activation command or `true`.
- */
-function getVenvCommand() {
-  let venv = getConfigValue('venv', null)
-  if (venv) {
-    let activate = getConfigValue('venvActivate', 'bin/activate')
-    return `. "${venv}/${activate}"`
-  }
-
-  return 'true'
-}
 
 /**
  * Converts a json Tinybird response into an ASCII table.
@@ -202,4 +173,5 @@ export function activate(context: vscode.ExtensionContext) {
   })
 
   context.subscriptions.push(sqlCommand)
+  registerCLICommands(context)
 }
