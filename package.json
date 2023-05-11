@@ -97,6 +97,13 @@
             }
         },
 
+        "languagesConfiguration": {
+            "tinybird": {
+                "wordPattern": "/[a-zA-Z0-9._]+/",
+                "keywords": "./language-configuration.json"
+            }
+        },
+
         "keybindings":[
             {
                 "command": "tinybird.sql",
