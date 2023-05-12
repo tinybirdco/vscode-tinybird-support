@@ -6,49 +6,62 @@ import { getConfigValue, getVenvCommand } from './utils'
 function getDataProjectPath(): string | null {
   const editor = vscode.window.activeTextEditor
   if (!editor) return null
-
   const dataProjectSubdir = getConfigValue('dataProjectSubdir', '')
   const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path || ''
   return path.join(workspacePath, dataProjectSubdir)
 }
 
-function executeCLICommand(
-  command: string,
-  dataProjectPath: string,
-  infoSql: vscode.OutputChannel
-) {
-  const commands = [`cd "${dataProjectPath}"`, getVenvCommand(), command]
-
-  cp.exec(commands.join(' && '), async (err, stdout, stderr) => {
-    if (err) infoSql.appendLine(`ERROR >\n${err}\n${stderr}`)
-    else {
-      infoSql.appendLine(stdout)
-    }
+const execShell = (cmd: string) =>
+  new Promise<string>(resolve => {
+    cp.exec(cmd, (err, out) => {
+      if (err) {
+        return resolve(cmd + ' error!')
+      }
+      return resolve(out)
+    })
   })
+
+function executeCLICommand(command: string, terminal: vscode.Terminal) {
+  const dataProjectPath = getDataProjectPath()
+  if (!dataProjectPath) return
+  const commands = [`cd "${dataProjectPath}"`, getVenvCommand(), command]
+  terminal.sendText(commands.join(' && '))
+}
+
+function listConnections(terminal: vscode.Terminal) {
+  executeCLICommand('tb connection ls', terminal)
+  terminal.show(false)
 }
 
 export function registerCLICommands(context: vscode.ExtensionContext) {
+  const terminal = vscode.window.createTerminal('Tinybird CLI')
+
   context.subscriptions.push(
     vscode.commands.registerCommand('tb.connection.ls', () => {
-      const output = vscode.window.createOutputChannel('Tinybird CLI', 'bash')
-      const dataProjectPath = getDataProjectPath()
-      if (!dataProjectPath) return
-
-      executeCLICommand('tb connection ls', dataProjectPath, output)
-
-      output.show(false)
+      executeCLICommand('tb connection ls', terminal)
+      terminal.show(false)
     })
   )
 
   context.subscriptions.push(
     vscode.commands.registerCommand('tb.connection.create', async () => {
-      const output = vscode.window.createOutputChannel('Tinybird CLI', 'bash')
-      const dataProjectPath = getDataProjectPath()
-      if (!dataProjectPath) return
+      // The code you place here will be executed every time your command is executed
 
-      executeCLICommand('tb connection create kafka', dataProjectPath, output)
+      // Show input box
+      let userInput = await vscode.window.showInputBox({
+        prompt: 'Please enter some input',
+        placeHolder: 'Input goes here...'
+      })
 
-      await output.show(false)
+      // Use the user input (if any was given)
+      if (userInput) {
+        userInput = await vscode.window.showInputBox({
+          prompt: 'Please enter another input',
+          placeHolder: 'Input goes here...'
+        })
+      } else {
+        vscode.window.showInformationMessage(`No input was received.`)
+      }
     })
   )
 }
