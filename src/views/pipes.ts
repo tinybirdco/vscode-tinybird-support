@@ -90,7 +90,7 @@ export class PipeTreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
 
 export class PipeView {
   private treeDataProvider: PipeTreeDataProvider
-  private view: vscode.TreeView<unknown>
+  private view: vscode.TreeView<TreeItem>
 
   public refresh() {
     this.treeDataProvider.refresh()

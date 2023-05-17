@@ -34,7 +34,7 @@ export class TokenTreeDataProvider
     this.#onDidChangeTreeData.fire(null)
   }
 
-  async getChildren(element?: TokenTreeItem): Promise<TokenTreeItem[]> {
+  async getChildren(element?: TokenTreeItem): Promise<TokenTreeItem[] | null> {
     if (!(await this.context.getToken())) {
       return []
     }
@@ -58,7 +58,7 @@ export class TokenTreeDataProvider
       )
     }
 
-    return []
+    return null
   }
 
   getTreeItem(element: TokenTreeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
@@ -68,7 +68,7 @@ export class TokenTreeDataProvider
 
 export class TokenView {
   private treeDataProvider: TokenTreeDataProvider
-  private view: vscode.TreeView<unknown>
+  private view: vscode.TreeView<TokenTreeItem>
 
   public refresh() {
     this.treeDataProvider.refresh()

@@ -96,7 +96,7 @@ export class DataSourceTreeDataProvider
 
 export class DataSourceView {
   private treeDataProvider: DataSourceTreeDataProvider
-  private view: vscode.TreeView<unknown>
+  private view: vscode.TreeView<TreeItem>
 
   public refresh() {
     this.treeDataProvider.refresh()
