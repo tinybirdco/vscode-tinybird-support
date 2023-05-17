@@ -1,8 +1,12 @@
 import * as vscode from 'vscode'
 import * as cp from 'child_process'
 import * as path from 'path'
-import { registerCLICommands } from './commands'
+import * as commands from './commands'
 import { getConfigValue, getVenvCommand } from './utils'
+import { DataSourceView } from './views/datasources'
+import { getContext } from './context'
+import { PipeView } from './views/pipes'
+import { TokenView } from './views/tokens'
 
 const infoSql = vscode.window.createOutputChannel('Tinybird SQL', 'sql')
 
@@ -115,6 +119,14 @@ function getPipeName(baseFileName: string) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+  const tinybirdContext = getContext(context)
+  const dataSourceView = new DataSourceView(tinybirdContext)
+  const pipeView = new PipeView(tinybirdContext)
+  const tokenView = new TokenView(tinybirdContext)
+  context.subscriptions.push(dataSourceView)
+  context.subscriptions.push(pipeView)
+  context.subscriptions.push(tokenView)
+
   const sqlCommand = vscode.commands.registerCommand('tinybird.sql', () => {
     let editor = vscode.window.activeTextEditor
     if (!editor) return
@@ -173,5 +185,14 @@ export function activate(context: vscode.ExtensionContext) {
   })
 
   context.subscriptions.push(sqlCommand)
-  registerCLICommands(context)
+  const refresh = () => {}
+
+  Object.values(commands).forEach(command => {
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        `tinybird.palette.${command.id}`,
+        command.action(tinybirdContext, refresh)
+      )
+    )
+  })
 }

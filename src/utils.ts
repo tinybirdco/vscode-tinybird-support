@@ -1,4 +1,6 @@
 import * as vscode from 'vscode'
+import * as path from 'path'
+import { Context } from './context'
 
 /**
  * Retrieves a setting.
@@ -28,4 +30,19 @@ export function getVenvCommand() {
     return `. "${venv}/${activate}"`
   }
   return 'true'
+}
+
+export function getDataProjectPath(): string | null {
+  const dataProjectSubdir = getConfigValue('dataProjectSubdir', '')
+  const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path || ''
+  return path.join(workspacePath, dataProjectSubdir)
+}
+
+export function executeCLICommand(command: string, context: Context) {
+  const dataProjectPath = getDataProjectPath()
+  if (!dataProjectPath) return
+  const commands = [`cd "${dataProjectPath}"`, getVenvCommand(), `tb ${command}`]
+  const terminal = context.getTerminal()
+  terminal.sendText(commands.join(' && '))
+  terminal.show(false)
 }
