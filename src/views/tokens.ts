@@ -79,7 +79,7 @@ export class TokenView {
 
     this.view = vscode.window.createTreeView('tokenView', {
       treeDataProvider: this.treeDataProvider,
-      showCollapseAll: true
+      showCollapseAll: false
     })
   }
 

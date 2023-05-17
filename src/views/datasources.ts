@@ -5,7 +5,6 @@ import { Column, DataSource } from '../types'
 
 export class ColumnTreeItem extends vscode.TreeItem {
   contextValue = 'column' as const
-  iconPath = new vscode.ThemeIcon('column')
 
   constructor(
     public readonly label: string,
@@ -13,8 +12,7 @@ export class ColumnTreeItem extends vscode.TreeItem {
     public readonly column: Column
   ) {
     super(label, collapsibleState)
-    const color = new vscode.ThemeColor('#e35f')
-    this.iconPath = new vscode.ThemeIcon('column', color)
+    this.description = column.type
   }
 }
 
@@ -28,8 +26,6 @@ export class DataSourceTreeItem extends vscode.TreeItem {
     public readonly datasource: DataSource
   ) {
     super(label, collapsibleState)
-    const color = new vscode.ThemeColor('#e35f')
-    this.iconPath = new vscode.ThemeIcon('database', color)
   }
 }
 
@@ -107,7 +103,7 @@ export class DataSourceView {
 
     this.view = vscode.window.createTreeView('dataSourceView', {
       treeDataProvider: this.treeDataProvider,
-      showCollapseAll: true
+      showCollapseAll: false
     })
   }
 

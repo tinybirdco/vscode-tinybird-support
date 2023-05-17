@@ -5,7 +5,7 @@ import { Pipe, Node } from '../types'
 
 export class PipeTreeItem extends vscode.TreeItem {
   contextValue = 'pipe' as const
-  iconPath = new vscode.ThemeIcon('pipe')
+  iconPath = new vscode.ThemeIcon('file')
 
   constructor(
     public readonly label: string,
@@ -13,14 +13,13 @@ export class PipeTreeItem extends vscode.TreeItem {
     public readonly pipe: Pipe
   ) {
     super(label, collapsibleState)
-    const color = new vscode.ThemeColor('#e35f')
-    this.iconPath = new vscode.ThemeIcon('pipe', color)
+    this.iconPath = new vscode.ThemeIcon('file')
   }
 }
 
 export class NodeTreeItem extends vscode.TreeItem {
   contextValue = 'node' as const
-  iconPath = new vscode.ThemeIcon('node')
+  iconPath = new vscode.ThemeIcon('circle-outline')
 
   constructor(
     public readonly label: string,
@@ -28,8 +27,6 @@ export class NodeTreeItem extends vscode.TreeItem {
     public readonly node: Node
   ) {
     super(label, collapsibleState)
-    const color = new vscode.ThemeColor('#e35f')
-    this.iconPath = new vscode.ThemeIcon('node', color)
   }
 }
 
@@ -101,7 +98,7 @@ export class PipeView {
 
     this.view = vscode.window.createTreeView('pipeView', {
       treeDataProvider: this.treeDataProvider,
-      showCollapseAll: true
+      showCollapseAll: false
     })
   }
 
