@@ -404,7 +404,7 @@ class DataFlow {
         _getDesc({ statistics, updated_at }) {
           const statsLabel = statistics ? `${statistics.row_count} rows` : '-'
 
-          return `${statsLabel} / Updated ${updated_at}`
+          return `${statsLabel} / Updated ${new Date(updated_at).toDateString()}`
         },
 
         _getExtraDesc(data) {
@@ -1204,16 +1204,6 @@ class DataFlow {
     if (this.graph) {
       this.graph.changeSize(width, height)
     }
-  }
-
-  renderMessage(message = 'Loading...') {
-    this.container = document.getElementById('graph-container')
-    if (!this.container) return
-    this.container.innerHTML = `
-      <div class="loading">
-        <div class="loading__spinner">${message}</div>
-      </div>
-    `
   }
 
   render(datasources, pipes) {
