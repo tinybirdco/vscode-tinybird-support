@@ -9,7 +9,7 @@ export function getContext(context: vscode.ExtensionContext) {
   let pipes: Pipe[] | null = null
 
   return {
-    ...context,
+    extensionUri: context.extensionUri,
     async getToken() {
       const token =
         'p.eyJ1IjogIjI0NGExMjNhLTgxNTItNDYyNy05ODk1LTRjMzM5MmNjODgzNSIsICJpZCI6ICIxNzVmNjk3ZC05OGRmLTQ2NDktYmVmYy01ODUxNjVlZGRmOWIifQ.1L1YOv86nuDNSc2J4ZdqQ-ppApJxAQ5u-RQrQn1PucU'
