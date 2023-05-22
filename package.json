@@ -51,7 +51,8 @@
   "main": "./build/extension.js",
   "activationEvents": [
     "onLanguage:tinybird",
-    "onLanguage:sql"
+    "onLanguage:sql",
+    "onWebviewPanel:catCoding"
   ],
   "contributes": {
     "languages": [
@@ -152,6 +153,16 @@
         "title": "Pull resources (force)",
         "enablement": "true",
         "category": "Tinybird CLI"
+      },
+      {
+        "command": "catCoding.start",
+        "title": "Start cat coding session",
+        "category": "Cat Coding"
+      },
+      {
+        "command": "catCoding.doRefactor",
+        "title": "Do some refactoring",
+        "category": "Cat Coding"
       }
     ],
     "viewsContainers": {
