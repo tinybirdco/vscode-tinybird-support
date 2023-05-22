@@ -22,7 +22,7 @@ export type Node = {
   name: string
 }
 
-export type RefreshAction = (scope?: 'explorer' | 'workspace') => void
+export type RefreshAction = () => void
 
 export type Command<T = void> = {
   id: string

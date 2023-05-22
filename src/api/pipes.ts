@@ -4,6 +4,6 @@ import { fetcher } from '../utils/fetcher'
 
 export const getPipes = (context: Context) =>
   fetcher<{ pipes: Pipe[] }>({
-    url: '/pipes',
+    url: '/v0/pipes',
     context
   })

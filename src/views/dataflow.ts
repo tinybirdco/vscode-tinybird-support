@@ -162,7 +162,7 @@ export class DataFlowPanel {
 </head>
 <body>
   <div id="root">
-      <div id="graph-container" style="height:100vh;"></div>
+      <div id="graph-container" style="height:100vh;width:100vw;background:#f6f7f9;"></div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.13/dist/g6.min.js"></script>
   <script>

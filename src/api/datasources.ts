@@ -4,6 +4,6 @@ import { fetcher } from '../utils/fetcher'
 
 export const getDataSources = (context: Context) =>
   fetcher<{ datasources: DataSource[] }>({
-    url: '/datasources',
+    url: '/v0/datasources',
     context
   })

@@ -10,7 +10,7 @@ export type FetcherOptions<TBody, THeaders, TParams> = {
   body?: TBody
   headers?: THeaders
   params?: TParams
-  token?: string
+  token?: string | null
   silentError?: boolean
 }
 
@@ -45,19 +45,16 @@ export async function fetcher<
       throw new Error('Tinybird: Invalid token')
     }
 
-    const baseUrl = context.getBaseUrl()
+    const host = await context.getHost()
     const fetch = await import('node-fetch').then(m => m.default)
-    const response = await fetch(
-      `${baseUrl}${resolveUrl(url, { ...params, token })}`,
-      {
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          ...headers
-        },
-        method,
-        body: body ? JSON.stringify(body) : undefined
-      }
-    )
+    const response = await fetch(`${host}${resolveUrl(url, { ...params, token })}`, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        ...headers
+      },
+      method,
+      body: body ? JSON.stringify(body) : undefined
+    })
 
     if (response.status === 401) {
       throw new Error('Tinybird: Invalid token')

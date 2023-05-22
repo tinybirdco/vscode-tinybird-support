@@ -4,6 +4,6 @@ import { fetcher } from '../utils/fetcher'
 
 export const getTokens = (context: Context) =>
   fetcher<{ tokens: Token[] }>({
-    url: '/tokens',
+    url: '/v0/tokens',
     context
   })

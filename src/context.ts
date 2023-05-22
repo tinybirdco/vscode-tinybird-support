@@ -11,20 +11,31 @@ export function getContext(context: vscode.ExtensionContext) {
   return {
     extensionUri: context.extensionUri,
     async getToken() {
-      const token =
-        'p.eyJ1IjogIjI0NGExMjNhLTgxNTItNDYyNy05ODk1LTRjMzM5MmNjODgzNSIsICJpZCI6ICIxNzVmNjk3ZC05OGRmLTQ2NDktYmVmYy01ODUxNjVlZGRmOWIifQ.1L1YOv86nuDNSc2J4ZdqQ-ppApJxAQ5u-RQrQn1PucU'
-      setContributeContext('tinybird.isLogged', Boolean(token))
+      let token = await context.secrets.get('token')
+      if (!token) {
+        const config = await this.loadWorkspaceConfig()
+        token = config.token
+        await this.setToken(token)
+      } else {
+        setContributeContext('tinybird.isLogged', Boolean(token))
+      }
       return token
     },
-    getBaseUrl() {
-      const configValue = 'https://api.tinybird.co/v0'
-
-      if (!(typeof configValue === 'string' && configValue.includes('//'))) {
-        vscode.window.showErrorMessage('"tinybird.baseUrl" is not a valid url')
-        return ''
+    setToken(token: string) {
+      setContributeContext('tinybird.isLogged', Boolean(token))
+      return context.secrets.store('token', token)
+    },
+    clearToken() {
+      setContributeContext('tinybird.isLogged', false)
+      return context.secrets.delete('token')
+    },
+    async getHost() {
+      let host = vscode.workspace.getConfiguration().get('tinybird.host') as string
+      if (!host) {
+        const config = await this.loadWorkspaceConfig()
+        host = config.host
       }
-
-      return configValue
+      return host
     },
     getTerminal() {
       if (!terminal || terminal.exitStatus) {
@@ -43,9 +54,6 @@ export function getContext(context: vscode.ExtensionContext) {
       pipes = response.data.pipes
       return pipes
     },
-    setPipes(newPipes: Pipe[]) {
-      pipes = newPipes
-    },
     getDataSources() {
       return datasources
     },
@@ -57,8 +65,35 @@ export function getContext(context: vscode.ExtensionContext) {
       datasources = response.data.datasources
       return datasources
     },
-    setDataSources(newDataSources: DataSource[]) {
-      datasources = newDataSources
+    async loadWorkspaceConfig() {
+      let config = {} as {
+        host: string
+        id: string
+        name: string
+        scope: string
+        token: string
+        user_email: string
+        user_id: string
+      }
+      if (vscode.workspace.workspaceFolders?.length) {
+        try {
+          const raw = await vscode.workspace.fs.readFile(
+            vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, '.tinyb')
+          )
+          const json = JSON.parse(Buffer.from(raw).toString('utf-8'))
+          config = {
+            ...config,
+            ...json
+          }
+        } catch {
+          /* The file doesn't exist or is not a valid json */
+          vscode.window.showWarningMessage(
+            'The .tinyb file is missing or is not a valid json'
+          )
+        }
+      }
+
+      return config
     }
   }
 }
