@@ -2,35 +2,35 @@ import * as vscode from 'vscode'
 import { Command } from '../types'
 import { executeCLICommand } from '../utils'
 
-export const connectionListCommand: Command<string> = {
+export const connectionListCommand: Command = {
   id: 'connectionList',
   action(context) {
     return () => executeCLICommand('connection ls', context)
   }
 }
 
-export const connectionCreateKafkaCommand: Command<string> = {
+export const connectionCreateKafkaCommand: Command = {
   id: 'connectionCreateKafka',
   action(context) {
     return () => executeCLICommand('connection create kafka', context)
   }
 }
 
-export const connectionCreateBigQueryCommand: Command<string> = {
+export const connectionCreateBigQueryCommand: Command = {
   id: 'connectionCreateBigQuery',
   action(context) {
     return () => executeCLICommand('connection create bigquery', context)
   }
 }
 
-export const connectionCreateSnowflakeCommand: Command<string> = {
+export const connectionCreateSnowflakeCommand: Command = {
   id: 'connectionCreateSnowflake',
   action(context) {
     return () => executeCLICommand('connection create snowflake', context)
   }
 }
 
-export const connectionRemoveCommand: Command<string> = {
+export const connectionRemoveCommand: Command = {
   id: 'connectionRemove',
   action(context) {
     return async () => {

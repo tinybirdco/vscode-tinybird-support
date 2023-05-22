@@ -89,74 +89,74 @@
         "enablement": "true"
       },
       {
-        "command": "tinybird.palette.login",
+        "command": "tinybird.login",
         "title": "Login",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.check",
+        "command": "tinybird.check",
         "title": "Check file syntax",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.connectionList",
+        "command": "tinybird.connectionList",
         "title": "List connections",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.connectionCreateKafka",
+        "command": "tinybird.connectionCreateKafka",
         "title": "Create Kafka connection",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.connectionCreateSnowflake",
+        "command": "tinybird.connectionCreateSnowflake",
         "title": "Create Snowflake connection",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.connectionCreateBigQuery",
+        "command": "tinybird.connectionCreateBigQuery",
         "title": "Create BigQuery connection",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.connectionRemove",
+        "command": "tinybird.connectionRemove",
         "title": "Remove connection",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.push",
+        "command": "tinybird.push",
         "title": "Push resources",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.pushForce",
+        "command": "tinybird.pushForce",
         "title": "Push resources (force)",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.pull",
+        "command": "tinybird.pull",
         "title": "Pull resources",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.palette.pullForce",
+        "command": "tinybird.pullForce",
         "title": "Pull resources (force)",
         "enablement": "true",
         "category": "Tinybird CLI"
       },
       {
-        "command": "tinybird.showDataFlow",
-        "title": "Start Data Flow",
+        "command": "tinybird.dataFlowStart",
+        "title": "Show Data Flow",
         "category": "Tinybird"
       }
     ],

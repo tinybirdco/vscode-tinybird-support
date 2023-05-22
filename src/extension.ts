@@ -128,18 +128,9 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(pipeView)
   context.subscriptions.push(tokenView)
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand('tinybird.showDataFlow', () => {
-      DataFlowPanel.createOrShow(context.extensionUri, tinybirdContext)
-    })
-  )
-
   if (vscode.window.registerWebviewPanelSerializer) {
-    // Make sure we register a serializer in activation event
     vscode.window.registerWebviewPanelSerializer(DataFlowPanel.viewType, {
-      async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
-        console.log(`Got state: ${state}`)
-        // Reset the webview options so we use latest uri for `localResourceRoots`.
+      async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel) {
         webviewPanel.webview.options = getWebviewOptions(context.extensionUri)
         DataFlowPanel.revive(webviewPanel, context.extensionUri, tinybirdContext)
       }
@@ -209,7 +200,7 @@ export function activate(context: vscode.ExtensionContext) {
   Object.values(commands).forEach(command => {
     context.subscriptions.push(
       vscode.commands.registerCommand(
-        `tinybird.palette.${command.id}`,
+        `tinybird.${command.id}`,
         command.action(tinybirdContext, refresh)
       )
     )

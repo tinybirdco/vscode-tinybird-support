@@ -6,7 +6,7 @@ export class LoginTreeItem extends vscode.TreeItem {
   constructor(public readonly label: string) {
     super(label)
     this.command = {
-      command: 'tinybird.palette.login',
+      command: 'tinybird.login',
       title: 'Login to Tinybird'
     }
     this.description = 'Click to start'

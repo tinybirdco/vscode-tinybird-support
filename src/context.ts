@@ -8,8 +8,8 @@ export function getContext(context: vscode.ExtensionContext) {
   let datasources: DataSource[] | null = null
   let pipes: Pipe[] | null = null
 
-  const output = vscode.window.createOutputChannel('Tinybird CLI', 'bash')
   return {
+    ...context,
     async getToken() {
       const token =
         'p.eyJ1IjogIjI0NGExMjNhLTgxNTItNDYyNy05ODk1LTRjMzM5MmNjODgzNSIsICJpZCI6ICIxNzVmNjk3ZC05OGRmLTQ2NDktYmVmYy01ODUxNjVlZGRmOWIifQ.1L1YOv86nuDNSc2J4ZdqQ-ppApJxAQ5u-RQrQn1PucU'
