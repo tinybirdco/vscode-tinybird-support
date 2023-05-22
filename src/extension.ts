@@ -7,7 +7,7 @@ import { DataSourceView } from './views/datasources'
 import { getContext } from './context'
 import { PipeView } from './views/pipes'
 import { TokenView } from './views/tokens'
-import { CatCodingPanel, getWebviewOptions } from './webview'
+import { DataFlowPanel, getWebviewOptions } from './views/dataflow'
 
 const infoSql = vscode.window.createOutputChannel('Tinybird SQL', 'sql')
 
@@ -129,27 +129,19 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(tokenView)
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('catCoding.start', () => {
-      CatCodingPanel.createOrShow(context.extensionUri)
-    })
-  )
-
-  context.subscriptions.push(
-    vscode.commands.registerCommand('catCoding.doRefactor', () => {
-      if (CatCodingPanel.currentPanel) {
-        CatCodingPanel.currentPanel.doRefactor()
-      }
+    vscode.commands.registerCommand('tinybird.showDataFlow', () => {
+      DataFlowPanel.createOrShow(context.extensionUri, tinybirdContext)
     })
   )
 
   if (vscode.window.registerWebviewPanelSerializer) {
     // Make sure we register a serializer in activation event
-    vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
+    vscode.window.registerWebviewPanelSerializer(DataFlowPanel.viewType, {
       async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
         console.log(`Got state: ${state}`)
         // Reset the webview options so we use latest uri for `localResourceRoots`.
         webviewPanel.webview.options = getWebviewOptions(context.extensionUri)
-        CatCodingPanel.revive(webviewPanel, context.extensionUri)
+        DataFlowPanel.revive(webviewPanel, context.extensionUri, tinybirdContext)
       }
     })
   }

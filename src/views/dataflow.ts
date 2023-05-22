@@ -1,10 +1,5 @@
 import * as vscode from 'vscode'
-
-const cats = {
-  'Data flow': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
-  'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
-  'Testing Cat': 'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif'
-}
+import { Context } from '../context'
 
 export function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptions {
   return {
@@ -16,51 +11,54 @@ export function getWebviewOptions(extensionUri: vscode.Uri): vscode.WebviewOptio
   }
 }
 
-/**
- * Manages cat coding webview panels
- */
-export class CatCodingPanel {
-  /**
-   * Track the currently panel. Only allow a single panel to exist at a time.
-   */
-  public static currentPanel: CatCodingPanel | undefined
+export class DataFlowPanel {
+  public static currentPanel: DataFlowPanel | undefined
 
-  public static readonly viewType = 'catCoding'
+  public static readonly viewType = 'dataFlow'
 
   private readonly _panel: vscode.WebviewPanel
   private readonly _extensionUri: vscode.Uri
   private _disposables: vscode.Disposable[] = []
+  private _context: Context
 
-  public static createOrShow(extensionUri: vscode.Uri) {
+  public static createOrShow(extensionUri: vscode.Uri, context: Context) {
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
       : undefined
 
     // If we already have a panel, show it.
-    if (CatCodingPanel.currentPanel) {
-      CatCodingPanel.currentPanel._panel.reveal(column)
+    if (DataFlowPanel.currentPanel) {
+      DataFlowPanel.currentPanel._panel.reveal(column)
       return
     }
 
     // Otherwise, create a new panel.
     const panel = vscode.window.createWebviewPanel(
-      CatCodingPanel.viewType,
+      DataFlowPanel.viewType,
       'Data flow',
       vscode.ViewColumn.Three,
       getWebviewOptions(extensionUri)
     )
 
-    CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri)
+    DataFlowPanel.currentPanel = new DataFlowPanel(panel, extensionUri, context)
   }
 
-  public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-    CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri)
+  public static revive(
+    panel: vscode.WebviewPanel,
+    extensionUri: vscode.Uri,
+    context: Context
+  ) {
+    DataFlowPanel.currentPanel = new DataFlowPanel(panel, extensionUri, context)
   }
 
-  private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+  private constructor(
+    panel: vscode.WebviewPanel,
+    extensionUri: vscode.Uri,
+    context: Context
+  ) {
     this._panel = panel
     this._extensionUri = extensionUri
-
+    this._context = context
     // Set the webview's initial html content
     this._update()
 
@@ -81,11 +79,23 @@ export class CatCodingPanel {
 
     // Handle messages from the webview
     this._panel.webview.onDidReceiveMessage(
-      message => {
+      async message => {
         switch (message.command) {
           case 'alert':
             vscode.window.showErrorMessage(message.text)
             return
+          case 'dataFlowLoaded': {
+            const [datasources, pipes] = await Promise.all([
+              this._context.getDataSources() ||
+                (await this._context.fetchDataSources()),
+              this._context.getPipes() || (await this._context.fetchPipes())
+            ])
+
+            this._panel.webview.postMessage({
+              command: 'loadEntities',
+              data: { datasources, pipes }
+            })
+          }
         }
       },
       null,
@@ -93,14 +103,8 @@ export class CatCodingPanel {
     )
   }
 
-  public doRefactor() {
-    // Send a message to the webview webview.
-    // You can send any JSON serializable data.
-    this._panel.webview.postMessage({ command: 'refactor' })
-  }
-
   public dispose() {
-    CatCodingPanel.currentPanel = undefined
+    DataFlowPanel.currentPanel = undefined
 
     // Clean up our resources
     this._panel.dispose()
@@ -115,26 +119,7 @@ export class CatCodingPanel {
 
   private _update() {
     const webview = this._panel.webview
-
-    // Vary the webview's content based on where it is located in the editor.
-    switch (this._panel.viewColumn) {
-      case vscode.ViewColumn.Two:
-        this._updateForCat(webview, 'Compiling Cat')
-        return
-
-      case vscode.ViewColumn.Three:
-        this._updateForCat(webview, 'Testing Cat')
-        return
-
-      case vscode.ViewColumn.One:
-      default:
-        this._updateForCat(webview, 'Data flow')
-        return
-    }
-  }
-
-  private _updateForCat(webview: vscode.Webview, catName: keyof typeof cats) {
-    this._panel.title = catName
+    this._panel.title = 'Data flow'
     this._panel.webview.html = this._getHtmlForWebview(webview)
   }
 
@@ -172,28 +157,25 @@ export class CatCodingPanel {
 <html>
 <head>
   <link href="${stylesResetUri}" rel="stylesheet">
-  <title>Angular Test </title>
+  <title>Data Flow</title>
  
 </head>
 <body>
   <div id="root">
-      <div id="graph-container" style="lightGrey:red;height:800px;"></div>
+      <div id="graph-container" style="height:100vh;"></div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.13/dist/g6.min.js"></script>
   <script>
     function onScriptLoad() {
       window.G6 = G6;
     }
-    var scriptTag = $document[0].createElement('script');
+    const scriptTag = $document[0].createElement('script');
     scriptTag.type = 'text/javascript'; 
     scriptTag.async = true;
     scriptTag.src = 'https://cdn.jsdelivr.net/npm/@antv/g6@4.8.13/dist/g6.min.js';
-    scriptTag.onreadystatechange = function () {
-      if (this.readyState == 'complete') onScriptLoad();
-    }
     scriptTag.onload = onScriptLoad;
     
-    var s = $document[0].getElementsByTagName('body')[0];
+    const s = $document[0].getElementsByTagName('body')[0];
     s.appendChild(scriptTag);
   </script>
   <script src="${stylesMainUri}" type="module"></script>

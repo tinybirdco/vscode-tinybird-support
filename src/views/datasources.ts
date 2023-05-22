@@ -53,13 +53,8 @@ export class DataSourceTreeDataProvider
     }
 
     if (!element) {
-      const response = await getDataSources(this.context)
-
-      if (!response.success) {
-        throw new Error(response.error.message)
-      }
-
-      const { datasources } = response.data
+      const datasources =
+        this.context.getDataSources() || (await this.context.fetchDataSources())
 
       return datasources.map(
         datasource =>

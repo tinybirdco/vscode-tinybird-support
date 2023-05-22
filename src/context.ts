@@ -1,7 +1,13 @@
 import * as vscode from 'vscode'
+import { DataSource, Pipe } from './types'
+import { getDataSources } from './api/datasources'
+import { getPipes } from './api/pipes'
 
 export function getContext(context: vscode.ExtensionContext) {
   let terminal: vscode.Terminal | undefined
+  let datasources: DataSource[] | null = null
+  let pipes: Pipe[] | null = null
+
   const output = vscode.window.createOutputChannel('Tinybird CLI', 'bash')
   return {
     async getToken() {
@@ -25,6 +31,34 @@ export function getContext(context: vscode.ExtensionContext) {
         terminal = vscode.window.createTerminal('Tinybird CLI')
       }
       return terminal
+    },
+    getPipes() {
+      return pipes
+    },
+    async fetchPipes() {
+      const response = await getPipes(this)
+      if (!response.success) {
+        throw new Error(response.error.message)
+      }
+      pipes = response.data.pipes
+      return pipes
+    },
+    setPipes(newPipes: Pipe[]) {
+      pipes = newPipes
+    },
+    getDataSources() {
+      return datasources
+    },
+    async fetchDataSources() {
+      const response = await getDataSources(this)
+      if (!response.success) {
+        throw new Error(response.error.message)
+      }
+      datasources = response.data.datasources
+      return datasources
+    },
+    setDataSources(newDataSources: DataSource[]) {
+      datasources = newDataSources
     }
   }
 }

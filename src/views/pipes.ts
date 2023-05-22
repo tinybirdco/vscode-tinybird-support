@@ -52,13 +52,7 @@ export class PipeTreeDataProvider implements vscode.TreeDataProvider<TreeItem> {
     }
 
     if (!element) {
-      const response = await getPipes(this.context)
-
-      if (!response.success) {
-        throw new Error(response.error.message)
-      }
-
-      const { pipes } = response.data
+      const pipes = this.context.getPipes() || (await this.context.fetchPipes())
 
       return pipes.map(
         pipe =>
