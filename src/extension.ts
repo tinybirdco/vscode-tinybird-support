@@ -149,7 +149,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (!editor) return
 
     let pipeName = getPipeName(editor.document.fileName)
-    let query = editor.document.getText(editor.selection)
+    let query = editor.document.getText(editor.selection) || editor.document.getText()
     if (!query) return
 
     let dataProjectSubdir = getConfigValue('dataProjectSubdir', '')
