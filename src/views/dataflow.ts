@@ -166,7 +166,7 @@ export class DataFlowPanel {
   <div id="root">
       <div id="graph-container" style="height:100vh;width:100vw;background:#f6f7f9;"></div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.13/dist/g6.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.3/dist/g6.min.js"></script>
   <script>
     function onScriptLoad() {
       window.G6 = G6;
@@ -174,7 +174,7 @@ export class DataFlowPanel {
     const scriptTag = $document[0].createElement('script');
     scriptTag.type = 'text/javascript'; 
     scriptTag.async = true;
-    scriptTag.src = 'https://cdn.jsdelivr.net/npm/@antv/g6@4.8.13/dist/g6.min.js';
+    scriptTag.src = 'https://cdn.jsdelivr.net/npm/@antv/g6@4.8.3/dist/g6.min.js';
     scriptTag.onload = onScriptLoad;
     
     const s = $document[0].getElementsByTagName('body')[0];

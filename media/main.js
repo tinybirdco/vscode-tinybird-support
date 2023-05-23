@@ -1,3 +1,33 @@
+function isDataSourceBeingSharedByUs(datasource) {
+  if (!datasource) {
+    return false
+  }
+  const { shared_with } = datasource
+  return !!shared_with && shared_with.length > 0
+}
+
+function isDataSourceSharedByOthers(datasource) {
+  if (!datasource) {
+    return false
+  }
+  const { shared_from } = datasource
+  return !!shared_from
+}
+
+function getOriginalDataSourceData(datasource) {
+  if (!isDataSourceSharedByOthers(datasource)) {
+    return null
+  }
+  return datasource.shared_from
+}
+
+function getNumberOfWorkspacesWhereDataSourceIsShared(datasource) {
+  if (!isDataSourceBeingSharedByUs(datasource)) {
+    return 0
+  }
+  return datasource.shared_with ? datasource.shared_with.length : 0
+}
+
 class DataFlow {
   container
   graph
@@ -8,15 +38,16 @@ class DataFlow {
     nodes: []
   }
   lastSelectedIdRef = { current: null }
+  NAME_MAX_CHARS = 32
 
   async getPipeStats() {}
 
-  enrichPipes(pipes, pipeStats) {
-    if (!pipes) {
+  enrichPipes(pipeStats) {
+    if (!this.pipes) {
       return []
     }
 
-    return pipes.map(pipe => {
+    return this.pipes.map(pipe => {
       const stats = pipeStats.find(p => pipe.id === p.id)
 
       if (!stats) {
@@ -62,13 +93,11 @@ class DataFlow {
         if (dependencies.length > 0) {
           dependencies.forEach(dependencyName => {
             if (entities['byName'][dependencyName] !== undefined) {
-              const item = {
+              elements.edges.push({
                 id: `e_${edgeCount}`,
                 source: entities['byName'][dependencyName]['id'],
                 target: id
-              }
-              elements.edges.push(item)
-
+              })
               edgeCount++
             }
           })
@@ -179,8 +208,20 @@ class DataFlow {
         })
       }
     })
-
     return elements
+  }
+
+  isDataSourceMaterialized(datasource) {
+    return (
+      !!datasource &&
+      Array.isArray(this.pipelines) &&
+      this.pipelines.some(
+        pipeline =>
+          pipeline.nodes &&
+          pipeline.nodes.findIndex(node => node.materialized === datasource.id) !==
+            -1
+      )
+    )
   }
 
   toEntitiesObject(pipes, datasources) {
@@ -235,11 +276,11 @@ class DataFlow {
       obj['byName'][pipe.name] = newItem
     })
 
-    datasources.forEach(function (ds) {
+    datasources.forEach(ds => {
       const newItem = {
         ...ds,
         type: 'DataSource',
-        materialized: false,
+        materialized: this.isDataSourceMaterialized(ds),
         used_by: ds.used_by ? ds.used_by.map(n => n.name) : [],
         dataSourceType: ds.type
       }
@@ -251,8 +292,8 @@ class DataFlow {
     return obj
   }
 
-  prepareData(pipes, data) {
-    const pipesWithStats = this.enrichPipes(pipes, data || [])
+  prepareData() {
+    const pipesWithStats = this.enrichPipes([])
     const entities = this.toEntitiesObject(pipesWithStats, this.datasources)
     return this.getDependencyGraph(entities)
   }
@@ -408,10 +449,11 @@ class DataFlow {
         },
 
         _getExtraDesc(data) {
-          const numberOfWorkspacesSharedWith = 0
-          const originalDSData = { original_workspace_name: '' }
-          const isSharedByUs = false
-          const isSharedByOthers = false
+          const numberOfWorkspacesSharedWith =
+            getNumberOfWorkspacesWhereDataSourceIsShared(data)
+          const originalDSData = getOriginalDataSourceData(data)
+          const isSharedByUs = isDataSourceBeingSharedByUs(data)
+          const isSharedByOthers = isDataSourceSharedByOthers(data)
           return isSharedByUs
             ? `Shared with ${numberOfWorkspacesSharedWith} workspaces`
             : isSharedByOthers
@@ -442,19 +484,18 @@ class DataFlow {
               text: this._getExtraDesc(data),
               fontSize: 12,
               fontWeight: 'normal',
-              fontFamily: 'Inter',
+              fontFamily: 'Inter,system-ui,sans-serif',
               lineHeight: 16,
               fill: mainColor,
               cursor: 'pointer'
             }
           })
         },
-
         draw(cfg, group) {
           const { data } = cfg
           const { name, updated_at, statistics, usedByLength, selected } = data
-          const isSharedByUs = false
-          const isSharedByOthers = false
+          const isSharedByUs = isDataSourceBeingSharedByUs(data)
+          const isSharedByOthers = isDataSourceSharedByOthers(data)
           const mainColor =
             isSharedByUs || isSharedByOthers || usedByLength > 0
               ? '#C157DB'
@@ -604,8 +645,8 @@ class DataFlow {
           const extraElement = group.get('children')[6]
           const extraDescElement = group.get('children')[7]
 
-          const isSharedByUs = false
-          const isSharedByOthers = false
+          const isSharedByUs = isDataSourceBeingSharedByUs(data)
+          const isSharedByOthers = isDataSourceSharedByOthers(data)
           const mainColor =
             isSharedByUs || isSharedByOthers || usedByLength > 0
               ? '#C157DB'
@@ -694,8 +735,8 @@ class DataFlow {
             }
           } = item
           const { usedByLength } = data
-          const isSharedByUs = false
-          const isSharedByOthers = false
+          const isSharedByUs = isDataSourceBeingSharedByUs(data)
+          const isSharedByOthers = isDataSourceSharedByOthers(data)
           const mainColor =
             isSharedByUs || isSharedByOthers || usedByLength > 0
               ? '#C157DB'
@@ -1035,9 +1076,8 @@ class DataFlow {
 
   createGraph(fit) {
     if (!this.graph && this.container) {
-      const NAME_MAX_CHARS = 32
-      this.registerPipeNode(window.G6, NAME_MAX_CHARS)
-      this.registerDSNode(window.G6, NAME_MAX_CHARS)
+      this.registerPipeNode(window.G6, this.NAME_MAX_CHARS)
+      this.registerDSNode(window.G6, this.NAME_MAX_CHARS)
       this.registerEdge(
         window.G6,
         this.elements && this.elements.nodes.length > 50
@@ -1112,9 +1152,9 @@ class DataFlow {
           nodesepFunc: function ({ type, data }) {
             if (type === 'ds-node') {
               if (
-                !data.usedByLength /* ||
-                isDataSourceSharedByOthers({ datasource: data }) ||
-                isDataSourceBeingSharedByUs({ datasource: data }) */
+                !data.usedByLength ||
+                !!data?.shared_from ||
+                !!data?.shared_with?.length > 0
               ) {
                 return 30
               }
@@ -1188,11 +1228,7 @@ class DataFlow {
 
   renderGraph() {
     this.graph.on('afterrender', function () {
-      /* if (selectedId) {
-        callback(selectedId)
-      } else {
-        graph.translate(80, 80)
-      } */
+      this.graph.translate(80, 80)
     })
 
     this.graph.render()
@@ -1211,7 +1247,7 @@ class DataFlow {
     this.pipes = pipes
     this.container = document.getElementById('graph-container')
     if (!this.container) return
-    this.elements = this.prepareData(pipes, [])
+    this.elements = this.prepareData()
     this.graph = this.createGraph(true)
     this.renderGraph()
   }
