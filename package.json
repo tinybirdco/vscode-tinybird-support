@@ -51,7 +51,8 @@
   "main": "./build/extension.js",
   "activationEvents": [
     "onLanguage:tinybird",
-    "onLanguage:sql"
+    "onLanguage:sql",
+    "onWebviewPanel:tinybird"
   ],
   "contributes": {
     "languages": [
@@ -84,12 +85,85 @@
     "commands": [
       {
         "command": "tinybird.sql",
-        "title": "Execute selected SQL in Tinybird",
+        "title": "Execute selected SQL in Tinybird ('tb sql')",
         "enablement": "true",
-        "icon": {
-          "light": "./images/icons/tb-play-light.svg",
-          "dark": "./images/icons/tb-play-dark.svg"
-        }
+        "icon": "$(play)"
+      },
+      {
+        "command": "tinybird.login",
+        "title": "Login",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.check",
+        "title": "Check file syntax",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.connectionList",
+        "title": "List connections",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.connectionCreateKafka",
+        "title": "Create Kafka connection",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.connectionCreateSnowflake",
+        "title": "Create Snowflake connection",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.connectionCreateBigQuery",
+        "title": "Create BigQuery connection",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.connectionRemove",
+        "title": "Remove connection",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.push",
+        "title": "Push resources",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.pushForce",
+        "title": "Push resources (force)",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.pull",
+        "title": "Pull resources",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.pullForce",
+        "title": "Pull resources (force)",
+        "enablement": "true",
+        "category": "Tinybird CLI"
+      },
+      {
+        "command": "tinybird.dataFlowStart",
+        "title": "Show Data Flow",
+        "category": "Tinybird"
+      },
+      {
+        "command": "tinybird.pipeAppend",
+        "title": "Append to pipe",
+        "category": "Tinybird CLI"
       }
     ],
     "menus": {
@@ -104,6 +178,31 @@
           "command": "tinybird.sql",
           "when": "editorTextFocus && editorLangId == 'tinybird' || editorTextFocus && editorLangId == 'sql'",
           "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "tinybird",
+          "title": "Tinybird",
+          "icon": "images/tinybird-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "tinybird": [
+        {
+          "id": "dataSourceView",
+          "name": "Data Sources"
+        },
+        {
+          "id": "pipeView",
+          "name": "Pipes"
+        },
+        {
+          "id": "tokenView",
+          "name": "Tokens"
         }
       ]
     },
@@ -146,7 +245,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "lint": "eslint \"src/**/*.ts\"",
-    "watch": "tsc -watch -p ./"
+    "dev": "webpack",
+    "watch": "webpack --watch"
   },
   "devDependencies": {
     "@types/node": "^16.11.7",
@@ -154,6 +254,12 @@
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "prettier": "2.8.3",
-    "typescript": "^5.0.2"
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.2",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.1"
   }
 }

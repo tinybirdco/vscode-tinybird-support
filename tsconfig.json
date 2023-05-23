@@ -2,11 +2,12 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2020",
-    "lib": ["es2020"],
+    "lib": ["es2020", "DOM"],
     "outDir": "build",
     "sourceMap": true,
     "strict": true,
-    "rootDir": "src"
+    "esModuleInterop": true,
+    "rootDirs": ["src", "scripts"]
   },
   "exclude": ["node_modules", ".vscode-test"]
 }
