@@ -87,10 +87,7 @@
         "command": "tinybird.sql",
         "title": "Execute selected SQL in Tinybird ('tb sql')",
         "enablement": "true",
-        "icon": {
-          "light": "./images/icons/tb-play-light.svg",
-          "dark": "./images/icons/tb-play-dark.svg"
-        }
+        "icon": "$(play)"
       },
       {
         "command": "tinybird.login",
