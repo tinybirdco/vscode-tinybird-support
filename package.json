@@ -2,7 +2,7 @@
   "name": "vscode-tinybird-support",
   "displayName": "Tinybird support for Visual Studio Code",
   "description": "This extension provides syntax highlighting and commands for Tinybird data projects.",
-  "version": "0.7.0",
+  "version": "1.0.0b",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -18,8 +18,12 @@
   },
   "contributors": [
     {
-      "name": "Luis Medel",
-      "email": "luis@luismedel.com"
+      "name": "Albert Romeu",
+      "email": "alrocar@tinybird.co"
+    },
+    {
+      "name": "Alejandro Del Amo",
+      "email": "alejandro@tinybird.co"
     },
     {
       "name": "Alejandro Martin",
@@ -30,16 +34,16 @@
       "email": "jrdi.villar@gmail.com"
     },
     {
-      "name": "Alejandro Del Amo",
-      "email": "alejandro@tinybird.co"
-    },
-    {
-      "name": "Albert Romeu",
-      "email": "alrocar@tinybird.co"
+      "name": "Luis Medel",
+      "email": "luis@luismedel.com"
     },
     {
       "name": "Rafa Moreno",
       "email": "rmoreno@tinybird.co"
+    },
+    {
+      "name": "Raquel Yuste",
+      "email": "raquel@tinybird.co"
     }
   ],
   "license": "MIT",
