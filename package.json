@@ -86,7 +86,11 @@
       {
         "command": "tinybird.sql",
         "title": "Execute selected SQL in Tinybird ('tb sql')",
-        "enablement": "true"
+        "enablement": "true",
+        "icon": {
+          "light": "./images/icons/tb-play-light.svg",
+          "dark": "./images/icons/tb-play-dark.svg"
+        }
       },
       {
         "command": "tinybird.login",
@@ -165,6 +169,21 @@
         "category": "Tinybird CLI"
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "tinybird.sql",
+          "when": "editorHasSelection"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "tinybird.sql",
+          "when": "editorTextFocus && editorLangId == 'tinybird' || editorTextFocus && editorLangId == 'sql'",
+          "group": "navigation"
+        }
+      ]
+    },
     "viewsContainers": {
       "activitybar": [
         {
