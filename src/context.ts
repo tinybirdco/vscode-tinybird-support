@@ -6,6 +6,7 @@ import { getPipes } from './api/pipes'
 export function getContext(context: vscode.ExtensionContext) {
   let terminal: vscode.Terminal | undefined
   let output: vscode.OutputChannel | undefined
+  let statusBarItem: vscode.StatusBarItem
   let datasources: DataSource[] | null = null
   let pipes: Pipe[] | null = null
 
@@ -49,6 +50,15 @@ export function getContext(context: vscode.ExtensionContext) {
         output = vscode.window.createOutputChannel('Tinybird SQL', 'sql')
       }
       return output
+    },
+    getStatusBarItem() {
+      if (!statusBarItem) {
+        statusBarItem = vscode.window.createStatusBarItem(
+          vscode.StatusBarAlignment.Left,
+          100
+        )
+      }
+      return statusBarItem
     },
     getPipes() {
       return pipes

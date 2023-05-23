@@ -39,3 +39,8 @@ export type Workspace = {
   id: string
   name: string
 }
+
+export type Environment = {
+  id: string
+  name: string
+}

@@ -7,8 +7,6 @@ import { TokenView } from './views/tokens'
 import { DataFlowPanel, getWebviewOptions } from './views/dataflow'
 import { getWorkspace } from './api/workspaces'
 
-let myStatusBarItem: vscode.StatusBarItem
-
 export function activate(context: vscode.ExtensionContext) {
   const tinybirdContext = getContext(context)
   const dataSourceView = new DataSourceView(tinybirdContext)
@@ -38,28 +36,30 @@ export function activate(context: vscode.ExtensionContext) {
     )
   })
 
-  // create a new status bar item that we can now manage
-  myStatusBarItem = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Left,
-    100
-  )
+  const statusBarItem = tinybirdContext.getStatusBarItem()
 
-  context.subscriptions.push(myStatusBarItem)
-
-  // update status bar item once at start
+  context.subscriptions.push(statusBarItem)
   updateStatusBarItem(tinybirdContext)
 }
 
 async function updateStatusBarItem(context: Context) {
+  const host = await context.getHost()
+  const statusBarItem = context.getStatusBarItem()
+
+  if (!host) {
+    statusBarItem.hide()
+    return
+  }
+
   const response = await getWorkspace(context)
 
   if (!response.success) {
-    myStatusBarItem.hide()
+    statusBarItem.hide()
     return
   }
 
   const workspace = response.data
 
-  myStatusBarItem.text = workspace.name
-  myStatusBarItem.show()
+  statusBarItem.text = `tb: ${workspace.name}`
+  statusBarItem.show()
 }

@@ -1,9 +1,9 @@
 import { Context } from '../context'
-import { Workspace } from '../types'
+import { Environment } from '../types'
 import { fetcher } from '../utils/fetcher'
 
 export const getEnvironments = (context: Context) =>
-  fetcher<Workspace>({
+  fetcher<{ environments: Environment[] }>({
     url: '/v0/workspace',
     context
   })
