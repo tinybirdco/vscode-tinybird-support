@@ -5,7 +5,7 @@ import { Token } from '../types'
 
 export class TokenTreeItem extends vscode.TreeItem {
   contextValue = 'token' as const
-  iconPath = new vscode.ThemeIcon('token')
+  iconPath = new vscode.ThemeIcon('key')
 
   constructor(
     public readonly label: string,
@@ -13,8 +13,7 @@ export class TokenTreeItem extends vscode.TreeItem {
     public readonly token: Token
   ) {
     super(label, collapsibleState)
-    const color = new vscode.ThemeColor('#e35f')
-    this.iconPath = new vscode.ThemeIcon('token', color)
+    this.iconPath = new vscode.ThemeIcon('key')
   }
 }
 

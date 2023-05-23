@@ -158,6 +158,11 @@
         "command": "tinybird.dataFlowStart",
         "title": "Show Data Flow",
         "category": "Tinybird"
+      },
+      {
+        "command": "tinybird.pipeAppend",
+        "title": "Append to pipe",
+        "category": "Tinybird CLI"
       }
     ],
     "viewsContainers": {
