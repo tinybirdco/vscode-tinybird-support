@@ -5,6 +5,7 @@ import { getPipes } from './api/pipes'
 
 export function getContext(context: vscode.ExtensionContext) {
   let terminal: vscode.Terminal | undefined
+  let output: vscode.OutputChannel | undefined
   let datasources: DataSource[] | null = null
   let pipes: Pipe[] | null = null
 
@@ -42,6 +43,12 @@ export function getContext(context: vscode.ExtensionContext) {
         terminal = vscode.window.createTerminal('Tinybird CLI')
       }
       return terminal
+    },
+    getOutput() {
+      if (!output) {
+        output = vscode.window.createOutputChannel('Tinybird SQL', 'sql')
+      }
+      return output
     },
     getPipes() {
       return pipes
