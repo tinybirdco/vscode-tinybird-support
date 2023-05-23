@@ -28,6 +28,18 @@ function getNumberOfWorkspacesWhereDataSourceIsShared(datasource) {
   return datasource.shared_with ? datasource.shared_with.length : 0
 }
 
+function isDataSourceMaterialized(datasource, pipelines) {
+  return (
+    !!datasource &&
+    Array.isArray(pipelines) &&
+    pipelines.some(
+      pipeline =>
+        pipeline.nodes &&
+        pipeline.nodes.findIndex(node => node.materialized === datasource.id) !== -1
+    )
+  )
+}
+
 class DataFlow {
   container
   graph
@@ -211,19 +223,6 @@ class DataFlow {
     return elements
   }
 
-  isDataSourceMaterialized(datasource) {
-    return (
-      !!datasource &&
-      Array.isArray(this.pipelines) &&
-      this.pipelines.some(
-        pipeline =>
-          pipeline.nodes &&
-          pipeline.nodes.findIndex(node => node.materialized === datasource.id) !==
-            -1
-      )
-    )
-  }
-
   toEntitiesObject(pipes, datasources) {
     let obj = {
       byName: {},
@@ -280,7 +279,7 @@ class DataFlow {
       const newItem = {
         ...ds,
         type: 'DataSource',
-        materialized: this.isDataSourceMaterialized(ds),
+        materialized: isDataSourceMaterialized(ds, this.pipelines),
         used_by: ds.used_by ? ds.used_by.map(n => n.name) : [],
         dataSourceType: ds.type
       }
