@@ -34,3 +34,8 @@ export type Token = {
   id: string
   name: string
 }
+
+export type Workspace = {
+  id: string
+  name: string
+}
