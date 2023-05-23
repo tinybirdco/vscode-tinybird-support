@@ -244,7 +244,6 @@
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
-    "cross-fetch": "^3.1.5",
     "node-fetch": "^3.3.1"
   }
 }
