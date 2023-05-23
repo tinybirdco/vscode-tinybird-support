@@ -242,10 +242,11 @@
     "configurationDefaults": {}
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run build",
     "compile": "tsc -p ./",
     "lint": "eslint \"src/**/*.ts\"",
     "dev": "webpack",
+    "build": "webpack --mode production",
     "watch": "webpack --watch"
   },
   "devDependencies": {
