@@ -24,6 +24,8 @@ The Tinybird Sidebar lists all the resources within your data project, including
 
 View the flow of data from Data Sources to Endpoints without switching back to the Tinybird UI. Simply open the Command Palette (`Cmd+Shift+P`), type `Tinybird CLI: Show Data Flow` and hit `Enter`. You can drag to navigate and zoom in/out with `Ctrl` and your scroll wheel/trackpad.
 
+![Data Flow screenshot](https://github.com/tinybirdco/vscode-tinybird-support/raw/main/images/data-flow-gif.gif)
+
 ## Execute common Tinybird commands
 
 Find and execute common Tinybird CLI commands from the Command Palette in VS Code. Use `Cmd+Shift+P` to open the Command Palette, type `Tinybird CLI` and find a list of available commands.
