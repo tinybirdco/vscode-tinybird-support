@@ -32,7 +32,7 @@ export function getVenvCommand() {
   return 'true'
 }
 
-export function getDataProjectPath(): string | null {
+export function getDataProjectPath(): string {
   const dataProjectSubdir = getConfigValue('dataProjectSubdir', '')
   const workspacePath = vscode.workspace.workspaceFolders?.[0].uri.path || ''
   return path.join(workspacePath, dataProjectSubdir)

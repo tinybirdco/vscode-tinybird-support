@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import { DataSource, Pipe } from './types'
 import { getDataSources } from './api/datasources'
 import { getPipes } from './api/pipes'
+import { getConfigValue } from './utils'
 
 export function getContext(context: vscode.ExtensionContext) {
   let terminal: vscode.Terminal | undefined
@@ -94,8 +95,13 @@ export function getContext(context: vscode.ExtensionContext) {
       }
       if (vscode.workspace.workspaceFolders?.length) {
         try {
+          const dataProjectSubdir = getConfigValue('dataProjectSubdir', '')
           const raw = await vscode.workspace.fs.readFile(
-            vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, '.tinyb')
+            vscode.Uri.joinPath(
+              vscode.workspace.workspaceFolders[0].uri,
+              dataProjectSubdir,
+              '.tinyb'
+            )
           )
           const json = JSON.parse(Buffer.from(raw).toString('utf-8'))
           config = {
