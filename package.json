@@ -70,7 +70,8 @@
           ".datasource",
           ".pipe",
           ".endpoint",
-          ".incl"
+          ".incl",
+          ".token"
         ],
         "configuration": "./language-configuration.json",
         "icon": {

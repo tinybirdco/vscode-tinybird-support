@@ -38,7 +38,7 @@
 		},
 
 		"sql_section": {
-			"begin": "^\\s*(SQL)\\s+(\\>)\\s*$",
+			"begin": "^\\s*(SQL|FILTER)\\s+(\\>)\\s*$",
 			"end": "^\\s*$",
 			"beginCaptures": {
 				"1": { "name":"keyword.control" },
@@ -48,7 +48,7 @@
 		},
 
 		"oneliner_section": {
-			"begin": "NODE|TOKEN\\b",
+			"begin": "NODE|TOKEN|SCOPE\\b",
 			"end": "$",
 			"captures": { "0": { "name":"keyword.control" } },
 			"patterns": [{ "include": "source.sql" }]
