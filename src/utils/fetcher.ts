@@ -60,6 +60,10 @@ export async function fetcher<
       throw new Error('Tinybird: Invalid token')
     }
 
+    if (response.status == 403) {
+      throw new Error('Tinybird: Access denied. Your token tried to enter a restricted nest!')
+    }
+
     if (response.status === 204 /* no content */) {
       return { success: true, data: undefined as any }
     }
