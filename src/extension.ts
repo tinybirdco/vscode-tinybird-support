@@ -9,6 +9,7 @@ import { getWorkspace } from './api/workspaces'
 
 export function activate(context: vscode.ExtensionContext) {
   const tinybirdContext = getContext(context)
+  tinybirdContext.clearToken()
   const dataSourceView = new DataSourceView(tinybirdContext)
   const pipeView = new PipeView(tinybirdContext)
   const tokenView = new TokenView(tinybirdContext)
