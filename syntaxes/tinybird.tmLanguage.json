@@ -11,9 +11,10 @@
 		{ "include": "#oneliner_meta" },
 		{ "include": "#oneliner_meta_engine" },
 		{ "include": "#oneliner_meta_kafka" },
-		{ "include": "#comment" },
-		{ "include": "source.sql" }
-	],
+                { "include": "#comment" },
+                { "include": "#template_block" },
+                { "include": "source.sql" }
+        ],
 
 	"repository": {
 		"desc_section": {
@@ -75,15 +76,24 @@
 			"patterns": [{ "include": "source.sql" }]
 		},
 
-		"comment": {
-			"match": "^\\s*#.*$",
-			"name": "comment"
-		},
+                "comment": {
+                        "match": "^\\s*#.*$",
+                        "name": "comment"
+                },
 
-		"schema_line": {
-			"match": "^\\s*([^\\s]+)\\s+([^\\s]+)(?:\\s+`json\\:(\\$[^`]+`))?",
-			"captures": {
-				"0": { "name":"variable" },
+                "template_block": {
+                        "begin": "\\{%",
+                        "end": "%\\}",
+                        "patterns": [
+                                { "match": "(?i)\\bELSE\\s+IF\\b", "name": "invalid.illegal.tinybird" },
+                                { "match": "\\bELIF\\b", "name": "keyword.control" }
+                        ]
+                },
+
+                "schema_line": {
+                        "match": "^\\s*([^\\s]+)\\s+([^\\s]+)(?:\\s+`json\\:(\\$[^`]+`))?",
+                        "captures": {
+                                "0": { "name":"variable" },
 				"1": { "name":"keyword.operator" },
 				"3": { "name":"string" }
 			}
