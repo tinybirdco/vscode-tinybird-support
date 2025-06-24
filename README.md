@@ -55,3 +55,11 @@ If you’re new to Tinybird and want to try it out, you can signup for free [her
 If you have any questions or want new features in the VS Code Extension, please join our [Slack community](https://www.tinybird.co/community).
 
 
+## Development
+
+To test the extension locally:
+1. Run `npm install` to install dependencies.
+2. Open this folder in VS Code.
+3. Press `F5` to launch a new Extension Development Host.
+
+For more details see [vsc-extension-quickstart.md](vsc-extension-quickstart.md).
